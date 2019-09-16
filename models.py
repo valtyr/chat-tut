@@ -20,11 +20,19 @@ users = sqlalchemy.Table(
 
 messages = sqlalchemy.Table(
     "messages", metadata,
-    sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True),
-    sqlalchemy.Column("body", sqlalchemy.String),
+    sqlalchemy.Column(
+        "id",
+        UUID(as_uuid=True),
+        primary_key=True,
+        server_default=sqlalchemy.text("uuid_generate_v4()"),
+    ), sqlalchemy.Column("body", sqlalchemy.String),
     sqlalchemy.Column("sent_at",
                       sqlalchemy.TIMESTAMP,
-                      default=datetime.datetime.utcnow))
+                      default=datetime.datetime.utcnow),
+    sqlalchemy.Column('user_id',
+                      UUID(as_uuid=True),
+                      sqlalchemy.ForeignKey('users.id'),
+                      nullable=False))
 
 tables = [users, messages]
 

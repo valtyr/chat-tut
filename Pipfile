@@ -8,10 +8,10 @@ flake8 = "*"
 yapf = "*"
 
 [packages]
-starlette = "*"
-databases = {extras = ["postgresql"],version = "*"}
 uvicorn = "*"
 ipython = "*"
+flask = "*"
+flask-sqlalchemy = "*"
 
 [requires]
 python_version = "3.7"
