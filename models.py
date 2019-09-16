@@ -1,5 +1,5 @@
 import sqlalchemy
-from sqlalchemy.dialects.postgresql import UUID, TIMESTAMP, dialect
+from sqlalchemy.dialects.postgresql import UUID, TIMESTAMP
 import datetime
 
 # Database table definitions.
@@ -23,7 +23,7 @@ messages = sqlalchemy.Table(
     sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True),
     sqlalchemy.Column("body", sqlalchemy.String),
     sqlalchemy.Column("sent_at",
-                      sqlalchemy.DateTime,
+                      sqlalchemy.TIMESTAMP,
                       default=datetime.datetime.utcnow))
 
 tables = [users, messages]
@@ -43,8 +43,7 @@ async def set_up():
     await database.execute('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";')
     for table in tables:
         try:
-            await database.execute(
-                CreateTable(table.__table__).compile(dialect=dialect()))
+            await database.execute(str(CreateTable(table)))
         except Exception as e:
             print(e)
     await database.disconnect()
